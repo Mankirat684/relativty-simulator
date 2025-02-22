@@ -59,16 +59,18 @@ input[type="range"] {
 
 .animation-container {
     display: flex;
-    justify-content: center;
+
     margin: 2rem 0;
 }
 
 .spaceship {
+    
     width: 50px;
     height: 50px;
-    background-color: #4CAF50;
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    animation: move 3s linear infinite;
+    background-color: #2d2d2d;
+    transform-box: 100%;
+    /* clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); */
+    animation: move 0s linear infinite;
     opacity: 0.8;
 }
 
@@ -80,10 +82,10 @@ input[type="range"] {
 }
 
 .length-box {
-    width: 100px;
+    width: 150px;
     height: 50px;
-    background-color: #4CAF50;
-    border: 2px solid #45a049;
+    background-color: #3b8f9d;
+    border: 2px solid #27252587;
     transition: width 0.3s ease;
 }
 
@@ -123,6 +125,18 @@ button:hover {
 }
 
 @keyframes move {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+    0% { transform: translateX( 0%); }
+    100% { transform: translateX(700%); }
+}
+@media screen and (max-width: 768px) {
+    @keyframes move {
+        0% { transform: translateX( 0%); }
+        100% { transform: translateX(530%); }
+    }
+}
+
+.spaceshipimg{
+    height: 50px;
+    width: 50px;
+    transform: rotate(90deg);
 }
