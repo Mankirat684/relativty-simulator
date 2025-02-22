@@ -1,9 +1,10 @@
-
+// declaring variables
 let isRunning = false;
 let startTime = 0;
 let earthTime = 0;
 let spaceshipTime = 0;
 let animationFrameId;
+let v = 0;
 
 const velocitySlider = document.getElementById('velocity');
 const velocityValue = document.getElementById('velocityValue');
@@ -17,26 +18,27 @@ startStopButton.addEventListener('click', toggleSimulation);
 resetButton.addEventListener('click', resetSimulation);
 
 function updateVelocity() {
-    const v = parseFloat(velocitySlider.value);
+    v = parseFloat(velocitySlider.value);
     velocityValue.textContent = (v * 100).toFixed(0) + '%';
     updateSpaceshipSpeed(v);
 }
 
 function updateSpaceshipSpeed(v) {
     const spaceship = document.querySelector('.spaceship');
-    spaceship.style.animationDuration = `${3 / (v + 0.1)}s`;
+    spaceship.style.animationDuration =  `${v > 0 ? 0.3 / v : 0}s`;
 }
 
-function calculateGamma(v) {
+function calculatelf(v) {
     return 1 / Math.sqrt(1 - v * v);
 }
 
+// stopwatch
 function toggleSimulation() {
     isRunning = !isRunning;
     startStopButton.textContent = isRunning ? 'Stop' : 'Start';
     
     if (isRunning) {
-        startTime = Date.now() - (earthTime * 1000);
+        startTime = Date.now();
         animate();
     } else {
         cancelAnimationFrame(animationFrameId);
@@ -47,14 +49,14 @@ function animate() {
     if (!isRunning) return;
 
     const currentTime = Date.now();
-    const deltaTime = (currentTime - startTime) / 1000;
+    const realTime = (currentTime - startTime) / 1000;
     startTime = currentTime;
 
     const v = parseFloat(velocitySlider.value);
-    const gamma = calculateGamma(v);
+    const lf = calculatelf(v);
 
-    earthTime += deltaTime;
-    spaceshipTime += deltaTime / gamma;
+    earthTime += realTime;
+    spaceshipTime += realTime / lf;
 
     earthTimeDisplay.textContent = earthTime.toFixed(2);
     spaceshipTimeDisplay.textContent = spaceshipTime.toFixed(2);
@@ -75,7 +77,7 @@ function resetSimulation() {
     cancelAnimationFrame(animationFrameId);
 }
 
-// Length Contraction Simulation
+// length contraction
 const lengthVelocitySlider = document.getElementById('lengthVelocity');
 const lengthVelocityValue = document.getElementById('lengthVelocityValue');
 const restLengthDisplay = document.getElementById('restLength');
@@ -88,17 +90,24 @@ function updateLengthContraction() {
     const v = parseFloat(lengthVelocitySlider.value);
     lengthVelocityValue.textContent = (v * 100).toFixed(0) + '%';
 
-    const restLength = 100; // Rest length in meters
-    const gamma = calculateGamma(v);
-    const contractedLength = restLength / gamma;
+    const restLength = 200;
+    const lf = calculatelf(v);
+    const contractedLength = restLength / lf;
 
     restLengthDisplay.textContent = restLength.toFixed(2);
     contractedLengthDisplay.textContent = contractedLength.toFixed(2);
 
-    // Update the visual length of the box
+    //updating length
     lengthBox.style.width = `${contractedLength}px`;
-}
+    if(lengthBox.style.width==`0px`){
+        // lengthBox.style.height = `0px`;
+        lengthBox.style.opacity = `0`;
+    }else{
+         lengthBox.style.height = `50px`;
+         lengthBox.style.opacity = `1`;
+     }
+    
 
-// Initial setup
+}
 updateVelocity();
 updateLengthContraction();
