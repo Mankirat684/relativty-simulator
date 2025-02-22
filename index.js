@@ -1,4 +1,4 @@
-// Time Dilation Simulation
+
 let isRunning = false;
 let startTime = 0;
 let earthTime = 0;
